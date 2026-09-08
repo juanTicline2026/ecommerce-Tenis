@@ -1,0 +1,80 @@
+# deploy/antigravity.yaml
+version: '1.0'
+
+name: tenis-ecommerce-backend
+description: Backend multi-agente para el sistema de e-commerce de Tenis.
+
+services:
+  api-gateway:
+    image: node:20-alpine
+    command: npm run start:gateway
+    ports:
+      - "8080:8080"
+    environment:
+      - NODE_ENV=production
+      - INVENTORY_AGENT_URL=http://inventory-agent:8081
+      - CHECKOUT_AGENT_URL=http://checkout-agent:8082
+    depends_on:
+      - inventory-agent
+      - checkout-agent
+
+  inventory-agent:
+    image: node:20-alpine
+    command: npm run start:inventory
+    ports:
+      - "8081:8081"
+    environment:
+      - DATABASE_URL=${DATABASE_URL}
+      - REDIS_URL=redis://redis-cache:6379
+    depends_on:
+      - postgres-db
+      - redis-cache
+    # Configuración para alta concurrencia
+    deploy:
+      replicas: 3
+      resources:
+        limits:
+          cpus: '1.0'
+          memory: 512M
+
+  checkout-agent:
+    image: node:20-alpine
+    command: npm run start:checkout
+    ports:
+      - "8082:8082"
+    environment:
+      - DATABASE_URL=${DATABASE_URL}
+      - REDIS_URL=redis://redis-cache:6379
+    depends_on:
+      - postgres-db
+      - inventory-agent
+    deploy:
+      replicas: 2
+      resources:
+        limits:
+          cpus: '1.0'
+          memory: 1G
+
+  postgres-db:
+    image: postgres:15-alpine
+    environment:
+      - POSTGRES_USER=tenis_admin
+      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
+      - POSTGRES_DB=tenis_db
+    ports:
+      - "5432:5432"
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+      # Montar el script DDL generado para inicializar la BD
+      - ./backend/db/schema.sql:/docker-entrypoint-initdb.d/schema.sql
+
+  redis-cache:
+    image: redis:7-alpine
+    ports:
+      - "6379:6379"
+    volumes:
+      - redisdata:/data
+
+volumes:
+  pgdata:
+  redisdata:

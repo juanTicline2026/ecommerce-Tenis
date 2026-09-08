@@ -1,0 +1,182 @@
+openapi: 3.0.3
+info:
+  title: Tenis E-Commerce API
+  version: 1.0.0
+  description: API para el sistema de e-commerce y gestión de tenis.
+servers:
+  - url: https://api.tenis-arios.com/v1
+paths:
+  /api/tenis:
+    get:
+      summary: Obtener catálogo general
+      description: Retorna una lista paginada de productos.
+      parameters:
+        - name: marca
+          in: query
+          schema:
+            type: string
+        - name: limit
+          in: query
+          schema:
+            type: integer
+            default: 20
+        - name: offset
+          in: query
+          schema:
+            type: integer
+            default: 0
+      responses:
+        '200':
+          description: Éxito
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/ProductoResumen'
+  /api/tenis/{id}:
+    get:
+      summary: Detalles del producto
+      description: Retorna los detalles de un producto incluyendo sus variantes, tallas y disponibilidad.
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+      responses:
+        '200':
+          description: Éxito
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProductoDetalle'
+        '404':
+          description: Producto no encontrado
+  /api/carrito/reservar:
+    post:
+      summary: Reservar inventario
+      description: Bloquea temporalmente el inventario por 15 minutos para un usuario en proceso de checkout.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - usuarioId
+                - inventarioId
+                - cantidad
+              properties:
+                usuarioId:
+                  type: string
+                  format: uuid
+                inventarioId:
+                  type: string
+                  format: uuid
+                cantidad:
+                  type: integer
+                  minimum: 1
+      responses:
+        '200':
+          description: Inventario reservado exitosamente
+        '400':
+          description: Stock insuficiente o inventario no encontrado
+  /api/checkout:
+    post:
+      summary: Procesar Checkout
+      description: Completa la transacción, cobra al usuario y asienta la orden de compra.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - usuarioId
+                - items
+              properties:
+                usuarioId:
+                  type: string
+                  format: uuid
+                items:
+                  type: array
+                  items:
+                    type: object
+                    required:
+                      - inventarioId
+                      - cantidad
+                      - precioUnitario
+                    properties:
+                      inventarioId:
+                        type: string
+                        format: uuid
+                      cantidad:
+                        type: integer
+                      precioUnitario:
+                        type: number
+                        format: float
+      responses:
+        '201':
+          description: Orden creada exitosamente
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  ordenId:
+                    type: string
+                    format: uuid
+        '400':
+          description: Error en el pago o reserva expirada
+components:
+  schemas:
+    ProductoResumen:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        marca:
+          type: string
+        modelo:
+          type: string
+        precioBase:
+          type: number
+    ProductoDetalle:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        marca:
+          type: string
+        modelo:
+          type: string
+        descripcion:
+          type: string
+        precioBase:
+          type: number
+        variantes:
+          type: array
+          items:
+            type: object
+            properties:
+              id:
+                type: string
+                format: uuid
+              colorway:
+                type: string
+              tallas:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    inventarioId:
+                      type: string
+                      format: uuid
+                    talla:
+                      type: number
+                    disponible:
+                      type: boolean
