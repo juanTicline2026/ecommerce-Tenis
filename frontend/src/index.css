@@ -160,3 +160,12 @@ img {
 .hover-scale:hover {
   transform: translateY(-4px);
 }
+
+/* Carousel Utilities */
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+.no-scrollbar {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}

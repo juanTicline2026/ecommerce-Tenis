@@ -9,14 +9,11 @@ interface CartItem {
   precioUnitario: number;
 }
 
+const inMemoryOrders: Array<{ id: string; usuarioId: string; items: CartItem[]; total: number; estado: string; createdAt: Date }> = [];
+
 export class CheckoutAgent {
   /**
    * Orquesta el proceso de checkout.
-   * 1. Verifica las reservas.
-   * 2. Calcula el total.
-   * 3. Cobra al usuario (simulado).
-   * 4. Confirma el stock con el Agente de Inventario.
-   * 5. Crea la orden en la BD.
    */
   async processCheckout(userId: string, items: CartItem[]): Promise<string> {
     let total = 0;
@@ -24,50 +21,67 @@ export class CheckoutAgent {
       total += item.cantidad * item.precioUnitario;
     }
 
-    const client = await db.connect();
-    try {
-      await client.query('BEGIN');
+    // Modo con PostgreSQL si está presente la conexión
+    if (db) {
+      const client = await db.connect();
+      try {
+        await client.query('BEGIN');
+        const paymentSuccess = await this.mockPaymentGateway(userId, total);
+        if (!paymentSuccess) {
+          throw new Error('Fallo al procesar el pago.');
+        }
 
-      // Paso 1: Intentar cobrar (Llamada a Payment Gateway simulada)
-      const paymentSuccess = await this.mockPaymentGateway(userId, total);
-      if (!paymentSuccess) {
-        throw new Error('Fallo al procesar el pago.');
+        await inventoryAgent.confirmStock(
+          userId,
+          items.map(i => ({ inventarioId: i.inventarioId, cantidad: i.cantidad })),
+          client
+        );
+
+        const res = await client.query(
+          `INSERT INTO Orden (usuario_id, detalles_items, total, estado)
+           VALUES ($1, $2, $3, $4) RETURNING id`,
+          [userId, JSON.stringify(items), total, 'completada']
+        );
+
+        const orderId = res.rows[0].id;
+        await client.query('COMMIT');
+        return orderId;
+      } catch (error) {
+        await client.query('ROLLBACK');
+        console.error('Error en checkout (DB):', error);
+        throw error;
+      } finally {
+        client.release();
       }
-
-      // Paso 2: Confirmar inventario a través del Agente de Inventario
-      // Esto consume las reservas
-      await inventoryAgent.confirmStock(userId, items.map(i => ({
-        inventarioId: i.inventarioId,
-        cantidad: i.cantidad
-      })), client);
-
-      // Paso 3: Crear el registro de la orden
-      const res = await client.query(
-        `INSERT INTO Orden (usuario_id, detalles_items, total, estado)
-         VALUES ($1, $2, $3, $4) RETURNING id`,
-        [userId, JSON.stringify(items), total, 'completada']
-      );
-
-      const orderId = res.rows[0].id;
-
-      await client.query('COMMIT');
-      return orderId;
-
-    } catch (error) {
-      await client.query('ROLLBACK');
-      console.error('Error en checkout:', error);
-      
-      // Intentar liberar el stock en caso de fallo crítico si no se ha consumido,
-      // aunque el TTL de Redis también actuará como fallback.
-      throw error;
-    } finally {
-      client.release();
     }
+
+    // Modo Standalone en memoria (sin servidor DB externo)
+    const paymentSuccess = await this.mockPaymentGateway(userId, total);
+    if (!paymentSuccess) {
+      throw new Error('Fallo al procesar el pago.');
+    }
+
+    await inventoryAgent.confirmStock(
+      userId,
+      items.map(i => ({ inventarioId: i.inventarioId, cantidad: i.cantidad }))
+    );
+
+    const orderId = `ord-${Date.now()}-${Math.floor(Math.random() * 1000)}`;
+    inMemoryOrders.push({
+      id: orderId,
+      usuarioId: userId,
+      items,
+      total,
+      estado: 'completada',
+      createdAt: new Date()
+    });
+
+    console.log(`[CheckoutAgent] Orden ${orderId} creada exitosamente en modo standalone.`);
+    return orderId;
   }
 
   private async mockPaymentGateway(userId: string, amount: number): Promise<boolean> {
-    // Simula procesamiento de pago (ej. Stripe, PayPal)
     console.log(`Procesando pago por $${amount} para usuario ${userId}`);
-    return new Promise((resolve) => setTimeout(() => resolve(true), 1000));
+    return new Promise(resolve => setTimeout(() => resolve(true), 300));
   }
 }

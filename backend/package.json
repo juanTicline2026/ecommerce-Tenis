@@ -8,14 +8,22 @@
     "start": "node dist/index.js",
     "dev": "tsc --watch"
   },
-  "keywords": ["backend", "ecommerce", "agents", "postgresql", "redis"],
+  "keywords": [
+    "backend",
+    "ecommerce",
+    "agents",
+    "postgresql",
+    "redis"
+  ],
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "express": "^5.2.1",
     "ioredis": "^5.3.2",
     "pg": "^8.11.3"
   },
   "devDependencies": {
+    "@types/express": "^5.0.6",
     "@types/node": "^20.11.0",
     "@types/pg": "^8.11.0",
     "typescript": "^5.3.3"
