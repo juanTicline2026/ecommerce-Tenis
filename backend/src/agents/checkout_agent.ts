@@ -1,5 +1,5 @@
 // backend/src/agents/checkout_agent.ts
-import { InventoryAgent, db } from './inventory_agent';
+import { InventoryAgent } from './inventory_agent';
 
 const inventoryAgent = new InventoryAgent();
 
@@ -9,14 +9,34 @@ interface CartItem {
   precioUnitario: number;
 }
 
+interface Orden {
+  id: string;
+  usuario_id: string;
+  detalles_items: CartItem[];
+  total: number;
+  estado: string;
+  created_at: Date;
+}
+
+// Simula la tabla "Orden" de PostgreSQL
+const ordenesStore: Map<string, Orden> = new Map();
+let ordenCounter = 0;
+
+function generateOrderId(): string {
+  ordenCounter++;
+  return `orden-${Date.now()}-${ordenCounter}`;
+}
+
 export class CheckoutAgent {
   /**
    * Orquesta el proceso de checkout.
-   * 1. Verifica las reservas.
-   * 2. Calcula el total.
-   * 3. Cobra al usuario (simulado).
-   * 4. Confirma el stock con el Agente de Inventario.
-   * 5. Crea la orden en la BD.
+   * 1. Calcula el total.
+   * 2. Cobra al usuario (simulado).
+   * 3. Confirma el stock con el Agente de Inventario.
+   * 4. Crea la orden en memoria.
+   *
+   * TODO [PRODUCCIÓN]: Envolver todo en una transacción de PostgreSQL
+   * usando db.connect() + BEGIN/COMMIT/ROLLBACK.
    */
   async processCheckout(userId: string, items: CartItem[]): Promise<string> {
     let total = 0;
@@ -24,10 +44,7 @@ export class CheckoutAgent {
       total += item.cantidad * item.precioUnitario;
     }
 
-    const client = await db.connect();
     try {
-      await client.query('BEGIN');
-
       // Paso 1: Intentar cobrar (Llamada a Payment Gateway simulada)
       const paymentSuccess = await this.mockPaymentGateway(userId, total);
       if (!paymentSuccess) {
@@ -36,38 +53,52 @@ export class CheckoutAgent {
 
       // Paso 2: Confirmar inventario a través del Agente de Inventario
       // Esto consume las reservas
-      await inventoryAgent.confirmStock(userId, items.map(i => ({
-        inventarioId: i.inventarioId,
-        cantidad: i.cantidad
-      })), client);
-
-      // Paso 3: Crear el registro de la orden
-      const res = await client.query(
-        `INSERT INTO Orden (usuario_id, detalles_items, total, estado)
-         VALUES ($1, $2, $3, $4) RETURNING id`,
-        [userId, JSON.stringify(items), total, 'completada']
+      await inventoryAgent.confirmStock(
+        userId,
+        items.map((i) => ({
+          inventarioId: i.inventarioId,
+          cantidad: i.cantidad,
+        }))
       );
 
-      const orderId = res.rows[0].id;
+      // Paso 3: Crear el registro de la orden (en memoria por ahora)
+      const orderId = generateOrderId();
+      const orden: Orden = {
+        id: orderId,
+        usuario_id: userId,
+        detalles_items: items,
+        total,
+        estado: 'completada',
+        created_at: new Date(),
+      };
 
-      await client.query('COMMIT');
+      ordenesStore.set(orderId, orden);
+      console.log(`[Checkout] Orden ${orderId} creada exitosamente. Total: $${total}`);
+
       return orderId;
-
     } catch (error) {
-      await client.query('ROLLBACK');
-      console.error('Error en checkout:', error);
-      
-      // Intentar liberar el stock en caso de fallo crítico si no se ha consumido,
-      // aunque el TTL de Redis también actuará como fallback.
+      console.error('[Checkout] Error en checkout:', error);
       throw error;
-    } finally {
-      client.release();
     }
+  }
+
+  /**
+   * Obtiene una orden por su ID.
+   */
+  async getOrder(orderId: string): Promise<Orden | null> {
+    return ordenesStore.get(orderId) || null;
+  }
+
+  /**
+   * Lista las órdenes de un usuario.
+   */
+  async getOrdersByUser(userId: string): Promise<Orden[]> {
+    return Array.from(ordenesStore.values()).filter((o) => o.usuario_id === userId);
   }
 
   private async mockPaymentGateway(userId: string, amount: number): Promise<boolean> {
     // Simula procesamiento de pago (ej. Stripe, PayPal)
-    console.log(`Procesando pago por $${amount} para usuario ${userId}`);
-    return new Promise((resolve) => setTimeout(() => resolve(true), 1000));
+    console.log(`[Checkout] Procesando pago por $${amount} para usuario ${userId}`);
+    return new Promise((resolve) => setTimeout(() => resolve(true), 500));
   }
 }
