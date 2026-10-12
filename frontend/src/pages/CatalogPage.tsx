@@ -1,6 +1,7 @@
 import React from 'react';
 import { ImagePlus } from 'lucide-react';
 import { ShoeCarousel } from '@/components/ShoeCarousel';
+import { HeroVideoBackground } from '@/components/HeroVideoBackground';
 
 // 10 empty card slots for products
 const EMPTY_SLOTS = Array.from({ length: 10 }, (_, i) => ({
@@ -22,6 +23,8 @@ export const CatalogPage: React.FC = () => {
         overflow: 'hidden',
         border: '1px solid var(--border-color)',
       }}>
+        <HeroVideoBackground src="/hero-video.mp4" />
+
         {/* Decorative glow orb */}
         <div style={{
           position: 'absolute',
@@ -63,7 +66,9 @@ export const CatalogPage: React.FC = () => {
         </div>
 
         {/* Animated sneaker carousel */}
-        <ShoeCarousel />
+        <div style={{ position: 'relative', zIndex: 10 }}>
+          <ShoeCarousel />
+        </div>
       </section>
 
       {/* Catalog Grid — 10 Empty Cards */}

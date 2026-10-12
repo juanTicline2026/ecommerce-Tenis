@@ -1,5 +1,6 @@
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import { Navbar } from './components/Navbar';
+import { PromoMarquee } from './components/PromoMarquee';
 import { CatalogPage } from './pages/CatalogPage';
 import { ProductDetailPage } from './pages/ProductDetailPage';
 
@@ -13,6 +14,7 @@ function App() {
 
       <div className="content-layer" style={{ minHeight: '100vh', display: 'flex', flexDirection: 'column' }}>
         <Navbar />
+        <PromoMarquee />
         <main style={{ flex: 1 }}>
           <Routes>
             <Route path="/" element={<CatalogPage />} />

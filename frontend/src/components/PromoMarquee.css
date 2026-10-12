@@ -1,0 +1,45 @@
+.promo-marquee {
+  position: relative;
+  z-index: 40;
+  overflow: hidden;
+  background: #000;
+  color: #fff;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.12);
+  padding: 10px 0;
+}
+
+.promo-marquee__track {
+  display: flex;
+  width: max-content;
+  animation: promo-marquee-scroll 60s linear infinite;
+}
+
+.promo-marquee:hover .promo-marquee__track {
+  animation-play-state: paused;
+}
+
+.promo-marquee__group {
+  display: flex;
+  flex-shrink: 0;
+}
+
+.promo-marquee__item {
+  flex-shrink: 0;
+  padding: 0 48px;
+  font-size: 0.875rem;
+  font-weight: 600;
+  letter-spacing: 0.3px;
+  white-space: nowrap;
+}
+
+@keyframes promo-marquee-scroll {
+  to {
+    transform: translateX(-50%);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .promo-marquee__track {
+    animation-duration: 180s;
+  }
+}
