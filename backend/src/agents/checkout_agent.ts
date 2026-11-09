@@ -9,11 +9,25 @@ interface CartItem {
   precioUnitario: number;
 }
 
-const inMemoryOrders: Array<{ id: string; usuarioId: string; items: CartItem[]; total: number; estado: string; createdAt: Date }> = [];
+export interface Orden {
+  id: string;
+  usuario_id: string;
+  detalles_items: CartItem[];
+  total: number;
+  estado: string;
+  created_at: Date;
+}
+
+// Simula la tabla "Orden" de PostgreSQL en modo standalone
+const ordenesStore: Map<string, Orden> = new Map();
 
 export class CheckoutAgent {
   /**
    * Orquesta el proceso de checkout.
+   * 1. Calcula el total.
+   * 2. Cobra al usuario (simulado).
+   * 3. Confirma el stock con el Agente de Inventario.
+   * 4. Crea la orden en PostgreSQL (si está configurado) o en memoria.
    */
   async processCheckout(userId: string, items: CartItem[]): Promise<string> {
     let total = 0;
@@ -67,21 +81,36 @@ export class CheckoutAgent {
     );
 
     const orderId = `ord-${Date.now()}-${Math.floor(Math.random() * 1000)}`;
-    inMemoryOrders.push({
+    const orden: Orden = {
       id: orderId,
-      usuarioId: userId,
-      items,
+      usuario_id: userId,
+      detalles_items: items,
       total,
       estado: 'completada',
-      createdAt: new Date()
-    });
+      created_at: new Date(),
+    };
 
-    console.log(`[CheckoutAgent] Orden ${orderId} creada exitosamente en modo standalone.`);
+    ordenesStore.set(orderId, orden);
+    console.log(`[CheckoutAgent] Orden ${orderId} creada exitosamente en modo standalone. Total: $${total}`);
     return orderId;
   }
 
+  /**
+   * Obtiene una orden por su ID.
+   */
+  async getOrder(orderId: string): Promise<Orden | null> {
+    return ordenesStore.get(orderId) || null;
+  }
+
+  /**
+   * Lista las órdenes de un usuario.
+   */
+  async getOrdersByUser(userId: string): Promise<Orden[]> {
+    return Array.from(ordenesStore.values()).filter((o) => o.usuario_id === userId);
+  }
+
   private async mockPaymentGateway(userId: string, amount: number): Promise<boolean> {
-    console.log(`Procesando pago por $${amount} para usuario ${userId}`);
-    return new Promise(resolve => setTimeout(() => resolve(true), 300));
+    console.log(`[Checkout] Procesando pago por $${amount} para usuario ${userId}`);
+    return new Promise((resolve) => setTimeout(() => resolve(true), 300));
   }
 }

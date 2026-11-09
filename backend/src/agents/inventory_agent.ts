@@ -19,6 +19,32 @@ if (redis) {
 }
 
 const HOLD_DURATION_SECONDS = 15 * 60; // 15 minutos
+const HOLD_DURATION_MS = HOLD_DURATION_SECONDS * 1000;
+
+// --- Almacenamiento en memoria (reemplaza PostgreSQL y Redis por ahora) ---
+
+export interface InventarioItem {
+  id: string;
+  variante_id: string;
+  talla: number;
+  cantidad_disponible: number;
+  cantidad_reservada: number;
+  version: number;
+}
+
+// Simula la tabla "Inventario" de PostgreSQL
+export const inventarioStore: Map<string, InventarioItem> = new Map();
+
+/**
+ * Agrega productos de prueba al inventario en memoria.
+ * Útil para desarrollo local.
+ */
+export function seedInventario(items: InventarioItem[]): void {
+  for (const item of items) {
+    inventarioStore.set(item.id, { ...item });
+  }
+  console.log(`[Inventario] Se cargaron ${items.length} items de prueba.`);
+}
 
 // Base de datos en memoria para funcionamiento 100% autosuficiente y autónomo
 export interface InMemProduct {
@@ -235,10 +261,30 @@ export class InventoryAgent {
     const lockKey = `reserva:${userId}:${inventarioId}`;
     inMemoryReservas.set(lockKey, {
       cantidad,
-      expiresAt: Date.now() + HOLD_DURATION_SECONDS * 1000
+      expiresAt: Date.now() + HOLD_DURATION_MS
     });
 
     return true;
+  }
+
+  /**
+   * Libera una reserva temporal si el tiempo expira o el usuario cancela.
+   */
+  async releaseStock(userId: string, inventarioId: string): Promise<void> {
+    const lockKey = `reserva:${userId}:${inventarioId}`;
+    const reserva = inMemoryReservas.get(lockKey);
+    if (!reserva) return;
+
+    for (const prod of MOCK_CATALOG) {
+      for (const varr of prod.variantes) {
+        const t = varr.tallas.find(ti => ti.inventarioId === inventarioId);
+        if (t) {
+          t.cantidadDisponible += reserva.cantidad;
+          t.cantidadReservada -= reserva.cantidad;
+        }
+      }
+    }
+    inMemoryReservas.delete(lockKey);
   }
 
   /**
@@ -294,5 +340,19 @@ export class InventoryAgent {
     }
 
     return true;
+  }
+
+  /**
+   * Consulta el inventario disponible de un item.
+   */
+  async getStock(inventarioId: string): Promise<InventarioItem | null> {
+    return inventarioStore.get(inventarioId) || null;
+  }
+
+  /**
+   * Lista todo el inventario disponible.
+   */
+  async getAllStock(): Promise<InventarioItem[]> {
+    return Array.from(inventarioStore.values());
   }
 }

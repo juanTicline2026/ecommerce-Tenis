@@ -2,6 +2,8 @@ import React from 'react';
 import { ProductCard } from '../components/ProductCard';
 import { ProductCarousel } from '../components/ProductCarousel';
 import type { CarouselProduct } from '../components/ProductCarousel';
+import { ShoeCarousel } from '@/components/ShoeCarousel';
+import { HeroVideoBackground } from '@/components/HeroVideoBackground';
 
 // Dummy data for initial render
 const MOCK_PRODUCTS = [
@@ -96,41 +98,62 @@ const CAROUSEL_PRODUCTS: CarouselProduct[] = [
 export const CatalogPage: React.FC = () => {
   return (
     <div className="animate-fade-in">
-      {/* Hero Section */}
+      {/* Hero Section with Video Background + 3D Shoe Carousel */}
       <section style={{
-        backgroundImage: `linear-gradient(180deg, rgba(0, 0, 0, 0.4) 0%, rgba(10, 10, 15, 0.8) 100%), url('/hero_banner.jpg')`,
-        backgroundSize: 'cover',
-        backgroundPosition: 'center',
+        background: 'linear-gradient(135deg, rgba(124, 58, 237, 0.08) 0%, rgba(10, 10, 15, 0.6) 50%, rgba(59, 130, 246, 0.06) 100%)',
         borderRadius: 'var(--radius-xl)',
         margin: '24px',
         padding: '80px 24px',
         textAlign: 'center',
         position: 'relative',
         overflow: 'hidden',
-        boxShadow: '0 20px 40px rgba(0,0,0,0.3)',
-        color: '#ffffff'
+        border: '1px solid var(--border-color)',
       }}>
-        <div style={{ maxWidth: '650px', margin: '0 auto', position: 'relative', zIndex: 10 }}>
-          <h1 className="text-5xl font-bold mb-4" style={{ letterSpacing: '-1px', textShadow: '0 4px 12px rgba(0,0,0,0.6)', color: '#ffffff' }}>
+        <HeroVideoBackground src="/hero-video.mp4" />
+
+        {/* Decorative glow orb */}
+        <div style={{
+          position: 'absolute',
+          top: '-40%',
+          left: '50%',
+          transform: 'translateX(-50%)',
+          width: '500px',
+          height: '500px',
+          borderRadius: '50%',
+          background: 'radial-gradient(circle, rgba(124, 58, 237, 0.12) 0%, transparent 70%)',
+          pointerEvents: 'none',
+        }} />
+
+        <div style={{ maxWidth: '600px', margin: '0 auto', position: 'relative', zIndex: 10 }}>
+          <h1 className="text-5xl font-bold mb-4" style={{ 
+            letterSpacing: '-1px',
+            background: 'linear-gradient(135deg, var(--text-primary) 0%, var(--accent-primary) 100%)',
+            WebkitBackgroundClip: 'text',
+            WebkitTextFillColor: 'transparent',
+            backgroundClip: 'text',
+          }}>
             Domina el Asfalto.
           </h1>
           <p className="text-lg mb-8" style={{ color: 'rgba(255, 255, 255, 0.9)', textShadow: '0 2px 8px rgba(0,0,0,0.6)', fontWeight: 500 }}>
             Descubre la nueva colección donde el diseño urbano se encuentra con el rendimiento profesional.
           </p>
           <button style={{
-            backgroundColor: '#ffffff',
-            color: '#000000',
-            padding: '16px 36px',
+            background: 'linear-gradient(135deg, var(--accent-primary) 0%, #6d28d9 100%)',
+            color: 'white',
+            padding: '16px 32px',
             borderRadius: 'var(--radius-xl)',
             fontWeight: '800',
             fontSize: '1rem',
-            boxShadow: '0 10px 25px rgba(255, 255, 255, 0.2)',
-            border: 'none',
-            cursor: 'pointer',
-            transition: 'transform 0.2s ease, box-shadow 0.2s ease'
+            boxShadow: '0 4px 20px rgba(124, 58, 237, 0.3)',
+            transition: 'all var(--transition-normal)',
           }} className="hover-scale">
             Explorar Colección
           </button>
+        </div>
+
+        {/* Animated sneaker carousel */}
+        <div style={{ position: 'relative', zIndex: 10 }}>
+          <ShoeCarousel />
         </div>
       </section>
 
@@ -141,14 +164,20 @@ export const CatalogPage: React.FC = () => {
         {/* Catalog Grid */}
         <div className="py-8">
           <div className="flex justify-between items-center mb-8">
-            <h2 className="text-3xl font-bold">Nuevos Lanzamientos</h2>
+            <h2 className="text-3xl font-bold" style={{
+              background: 'linear-gradient(90deg, var(--text-primary) 0%, var(--text-secondary) 100%)',
+              WebkitBackgroundClip: 'text',
+              WebkitTextFillColor: 'transparent',
+              backgroundClip: 'text',
+            }}>Nuevos Lanzamientos</h2>
             <select style={{
               padding: '8px 16px',
               borderRadius: 'var(--radius-md)',
               border: '1px solid var(--border-color)',
               backgroundColor: 'var(--bg-secondary)',
+              color: 'var(--text-secondary)',
               fontFamily: 'inherit',
-              fontWeight: 500
+              fontWeight: 500,
             }}>
               <option>Ordenar por Relevancia</option>
               <option>Precio: Menor a Mayor</option>

@@ -9,7 +9,7 @@ interface ProductCardProps {
   imageUrl: string;
 }
 
-export const ProductCard: React.FC<ProductCardProps> = ({ id, marca, modelo, precioBase, imageUrl }) => {
+export const ProductCard: React.FC<ProductCardProps> = ({ id: _id, marca, modelo, precioBase, imageUrl }) => {
   return (
     <div style={{ display: 'block' }} className="hover-scale">
       <article style={{
