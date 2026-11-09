@@ -40,111 +40,117 @@ const MOCK_PRODUCTS = [
 const CAROUSEL_PRODUCTS: CarouselProduct[] = [
   {
     id: 'prod-c1',
-    marca: 'ASICS',
-    modelo: 'Novablast 5 Tr',
-    subtitulo: 'Masculino - Verde',
+    marca: 'UNDERGOLD',
+    modelo: 'SNEAKERS',
+    subtitulo: 'Crimson Oxide',
     precioOriginal: 749950,
     precioActual: 524965,
     imageUrl: 'https://images.unsplash.com/photo-1542291026-7eec264c27ff?auto=format&fit=crop&q=80&w=800',
-    badge: 'Oferta'
+    badge: 'OFERTA - MEDELLÍN DROP',
+    badgeStyle: 'dark',
   },
   {
     id: 'prod-c2',
-    marca: 'ASICS',
-    modelo: 'Metarun Split Short',
-    subtitulo: 'Masculino - Negro',
+    marca: 'UG TRAILER',
+    modelo: '"04"',
+    subtitulo: 'High-Top - Black',
     precioActual: 319950,
-    imageUrl: 'https://images.unsplash.com/photo-1591195853828-11db59a44f6b?auto=format&fit=crop&q=80&w=800'
+    imageUrl: 'https://images.unsplash.com/photo-1525966222134-fcfa99b8ae77?auto=format&fit=crop&q=80&w=800',
   },
   {
     id: 'prod-c3',
-    marca: 'ASICS',
-    modelo: 'SILVER SS TOP',
-    subtitulo: 'Masculino - Gris',
+    marca: 'UG SHADOW',
+    modelo: 'TECH',
+    subtitulo: 'Runner - Gris',
     precioOriginal: 139950,
     precioActual: 89568,
-    imageUrl: 'https://images.unsplash.com/photo-1521572267360-ee0c2909d518?auto=format&fit=crop&q=80&w=800',
-    badge: 'Popular'
+    imageUrl: 'https://images.unsplash.com/photo-1539185441755-769473a23570?auto=format&fit=crop&q=80&w=800',
+    badge: 'MDE ORIGINAL',
+    badgeStyle: 'gold',
   },
   {
     id: 'prod-c4',
-    marca: 'ASICS',
-    modelo: 'PERFORMANCE RUNNING CAP',
-    subtitulo: 'Unisex - Negro',
+    marca: 'UG',
+    modelo: 'FREESTYLE',
+    subtitulo: 'Sneaker - Blanco',
     precioActual: 139950,
-    imageUrl: 'https://images.unsplash.com/photo-1588850561407-ed78c282e89b?auto=format&fit=crop&q=80&w=800'
+    imageUrl: 'https://images.unsplash.com/photo-1549298916-b41d501d3772?auto=format&fit=crop&q=80&w=800',
+    badge: 'MDE ORIGINAL',
+    badgeStyle: 'light',
   },
   {
     id: 'prod-c5',
-    marca: 'ASICS',
-    modelo: 'Wrist Band Long',
-    subtitulo: 'Unisex - Blanco',
-    precioOriginal: 49950,
-    precioActual: 27600,
-    imageUrl: 'https://images.unsplash.com/photo-1608231387042-66d1773070a5?auto=format&fit=crop&q=80&w=800'
+    marca: 'UG',
+    modelo: 'OFF-ROAD',
+    subtitulo: 'Low - Multicolor',
+    precioActual: 139950,
+    imageUrl: 'https://images.unsplash.com/photo-1608231387042-66d1773070a5?auto=format&fit=crop&q=80&w=800',
   },
   {
     id: 'prod-c6',
-    marca: 'Nike',
-    modelo: 'Air Zoom Pegasus 40',
-    subtitulo: 'Masculino - Azul',
+    marca: 'NIKE',
+    modelo: 'AIR ZOOM PEGASUS 40',
+    subtitulo: 'Street Runner - Azul',
     precioOriginal: 689900,
     precioActual: 499900,
     imageUrl: 'https://images.unsplash.com/photo-1552346154-21d32810baa3?auto=format&fit=crop&q=80&w=800',
-    badge: 'Nuevo'
+    badge: 'MDE ORIGINAL',
+    badgeStyle: 'gold',
   }
 ];
 
 export const CatalogPage: React.FC = () => {
   return (
     <div className="animate-fade-in">
-      {/* Hero Section with Video Background + 3D Shoe Carousel */}
+      {/* Hero Section — Dark Asphalt & Clear Video */}
       <section style={{
-        background: 'linear-gradient(135deg, rgba(124, 58, 237, 0.08) 0%, rgba(10, 10, 15, 0.6) 50%, rgba(59, 130, 246, 0.06) 100%)',
+        background: 'linear-gradient(180deg, rgba(10, 12, 16, 0.35) 0%, rgba(12, 14, 18, 0.2) 50%, rgba(8, 9, 12, 0.65) 100%)',
         borderRadius: 'var(--radius-xl)',
         margin: '24px',
         padding: '80px 24px',
         textAlign: 'center',
         position: 'relative',
         overflow: 'hidden',
-        border: '1px solid var(--border-color)',
+        border: '1px solid rgba(255, 255, 255, 0.1)',
       }}>
         <HeroVideoBackground src="/hero-video.mp4" />
 
-        {/* Decorative glow orb */}
+        {/* Subtle warm-silver ambient highlight (no purple) */}
         <div style={{
           position: 'absolute',
-          top: '-40%',
+          top: '-35%',
           left: '50%',
           transform: 'translateX(-50%)',
-          width: '500px',
-          height: '500px',
+          width: '520px',
+          height: '420px',
           borderRadius: '50%',
-          background: 'radial-gradient(circle, rgba(124, 58, 237, 0.12) 0%, transparent 70%)',
+          background: 'radial-gradient(circle, rgba(255, 255, 255, 0.06) 0%, transparent 70%)',
           pointerEvents: 'none',
         }} />
 
         <div style={{ maxWidth: '600px', margin: '0 auto', position: 'relative', zIndex: 10 }}>
           <h1 className="text-5xl font-bold mb-4" style={{ 
             letterSpacing: '-1px',
-            background: 'linear-gradient(135deg, var(--text-primary) 0%, var(--accent-primary) 100%)',
+            background: 'linear-gradient(135deg, #ffffff 0%, #cbd5e1 65%, #94a3b8 100%)',
             WebkitBackgroundClip: 'text',
             WebkitTextFillColor: 'transparent',
             backgroundClip: 'text',
+            filter: 'drop-shadow(0 4px 16px rgba(0, 0, 0, 0.75))',
           }}>
             Domina el Asfalto.
           </h1>
-          <p className="text-lg mb-8" style={{ color: 'rgba(255, 255, 255, 0.9)', textShadow: '0 2px 8px rgba(0,0,0,0.6)', fontWeight: 500 }}>
+          <p className="text-lg mb-8" style={{ color: 'rgba(255, 255, 255, 0.92)', textShadow: '0 2px 10px rgba(0,0,0,0.8)', fontWeight: 500 }}>
             Descubre la nueva colección donde el diseño urbano se encuentra con el rendimiento profesional.
           </p>
           <button style={{
-            background: 'linear-gradient(135deg, var(--accent-primary) 0%, #6d28d9 100%)',
-            color: 'white',
-            padding: '16px 32px',
+            background: 'linear-gradient(135deg, #1e232d 0%, #0f1218 100%)',
+            color: '#f8fafc',
+            padding: '16px 34px',
             borderRadius: 'var(--radius-xl)',
             fontWeight: '800',
             fontSize: '1rem',
-            boxShadow: '0 4px 20px rgba(124, 58, 237, 0.3)',
+            border: '1px solid rgba(255, 255, 255, 0.22)',
+            boxShadow: '0 8px 24px rgba(0, 0, 0, 0.65), inset 0 1px 0 rgba(255, 255, 255, 0.18)',
             transition: 'all var(--transition-normal)',
           }} className="hover-scale">
             Explorar Colección
@@ -157,12 +163,20 @@ export const CatalogPage: React.FC = () => {
         </div>
       </section>
 
-      {/* Horizontal Cards Carousel Section: "Seleccionados para ti" */}
-      <main className="container">
-        <ProductCarousel title="Seleccionados para ti" products={CAROUSEL_PRODUCTS} />
+      {/* Full-width Medellín Street Culture Section */}
+      <ProductCarousel
+        title="SELECCIONADOS PARA TI // MEDELLÍN STREET CULTURE"
+        products={CAROUSEL_PRODUCTS}
+      />
 
-        {/* Catalog Grid */}
-        <div className="py-8">
+      {/* Catalog Grid */}
+      <main
+        style={{
+          background: 'linear-gradient(180deg, #090a0d 0%, #101217 50%, #07080a 100%)',
+          paddingTop: '16px',
+        }}
+      >
+        <div className="container py-8">
           <div className="flex justify-between items-center mb-8">
             <h2 className="text-3xl font-bold" style={{
               background: 'linear-gradient(90deg, var(--text-primary) 0%, var(--text-secondary) 100%)',

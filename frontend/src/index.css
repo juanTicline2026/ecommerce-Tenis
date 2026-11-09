@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Outfit:wght@500;700;900&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Inter:wght@400;500;600;700;800&family=Outfit:wght@500;700;900&family=Permanent+Marker&display=swap');
 @import "tailwindcss";
 
 /* shadcn/ui design tokens mapped onto the existing Dark Nebula palette */
@@ -32,14 +32,14 @@
   --accent-hover: #6d28d9;
   --accent-glow: rgba(124, 58, 237, 0.3);
   
-  --nebula-1: #0a0a0f;
-  --nebula-2: #0d0b1a;
-  --nebula-3: #120e24;
-  --nebula-4: #0f0d1e;
-  --nebula-5: #0a0912;
+  --nebula-1: #07080a;
+  --nebula-2: #0a0c10;
+  --nebula-3: #101318;
+  --nebula-4: #0b0d11;
+  --nebula-5: #050608;
   
-  --border-color: rgba(255, 255, 255, 0.06);
-  --border-glow: rgba(124, 58, 237, 0.15);
+  --border-color: rgba(255, 255, 255, 0.08);
+  --border-glow: rgba(245, 158, 11, 0.25);
   
   --shadow-sm: 0 1px 3px 0 rgba(0, 0, 0, 0.4);
   --shadow-md: 0 4px 12px -1px rgba(0, 0, 0, 0.5), 0 2px 6px -1px rgba(0, 0, 0, 0.3);
@@ -75,7 +75,7 @@ body {
   overflow-x: hidden;
 }
 
-/* Nebula Animated Background */
+/* Dark Asphalt / Charcoal Animated Background */
 .nebula-bg {
   position: fixed;
   top: 0;
@@ -86,10 +86,10 @@ body {
   overflow: hidden;
   pointer-events: none;
   background: 
-    radial-gradient(ellipse 80% 60% at 20% 30%, rgba(124, 58, 237, 0.08) 0%, transparent 60%),
-    radial-gradient(ellipse 60% 80% at 80% 70%, rgba(59, 130, 246, 0.06) 0%, transparent 60%),
-    radial-gradient(ellipse 90% 50% at 50% 50%, rgba(139, 92, 246, 0.04) 0%, transparent 70%),
-    linear-gradient(180deg, var(--nebula-1) 0%, var(--nebula-2) 20%, var(--nebula-3) 40%, var(--nebula-4) 70%, var(--nebula-5) 100%);
+    radial-gradient(ellipse 80% 60% at 20% 30%, rgba(255, 255, 255, 0.03) 0%, transparent 60%),
+    radial-gradient(ellipse 60% 80% at 80% 70%, rgba(245, 158, 11, 0.025) 0%, transparent 60%),
+    radial-gradient(ellipse 90% 50% at 50% 50%, rgba(15, 23, 42, 0.5) 0%, transparent 70%),
+    linear-gradient(180deg, #060709 0%, #0d1015 35%, #12151c 65%, #07080a 100%);
 }
 
 .nebula-bg::before {
@@ -100,9 +100,9 @@ body {
   width: 200%;
   height: 200%;
   background: 
-    radial-gradient(circle at 30% 40%, rgba(124, 58, 237, 0.06) 0%, transparent 40%),
-    radial-gradient(circle at 70% 60%, rgba(59, 130, 246, 0.04) 0%, transparent 40%),
-    radial-gradient(circle at 50% 30%, rgba(168, 85, 247, 0.05) 0%, transparent 35%);
+    radial-gradient(circle at 30% 40%, rgba(255, 255, 255, 0.025) 0%, transparent 40%),
+    radial-gradient(circle at 70% 60%, rgba(30, 41, 59, 0.25) 0%, transparent 40%),
+    radial-gradient(circle at 50% 30%, rgba(217, 119, 6, 0.02) 0%, transparent 35%);
   animation: nebulaFloat 20s ease-in-out infinite alternate;
 }
 
@@ -114,8 +114,8 @@ body {
   width: 100%;
   height: 100%;
   background: 
-    radial-gradient(circle at 60% 20%, rgba(99, 102, 241, 0.05) 0%, transparent 50%),
-    radial-gradient(circle at 20% 80%, rgba(139, 92, 246, 0.04) 0%, transparent 50%);
+    radial-gradient(circle at 60% 20%, rgba(51, 65, 85, 0.12) 0%, transparent 50%),
+    radial-gradient(circle at 20% 80%, rgba(15, 23, 42, 0.2) 0%, transparent 50%);
   animation: nebulaFloat 25s ease-in-out infinite alternate-reverse;
 }
 
@@ -462,7 +462,7 @@ body {
   height: 22px;
   margin-left: calc(var(--card-w) * -0.4);
   border-radius: 50%;
-  background: radial-gradient(ellipse at center, rgba(124, 58, 237, 0.55) 0%, rgba(0, 0, 0, 0.45) 45%, transparent 72%);
+  background: radial-gradient(ellipse at center, rgba(255, 255, 255, 0.22) 0%, rgba(0, 0, 0, 0.65) 45%, transparent 72%);
   filter: blur(6px);
   animation: shoeGround 3.6s ease-in-out infinite;
   pointer-events: none;
@@ -488,7 +488,7 @@ body {
   left: 100%;
   height: 2px;
   border-radius: 2px;
-  background: linear-gradient(90deg, transparent, rgba(168, 85, 247, 0.9), rgba(255, 255, 255, 0.85));
+  background: linear-gradient(90deg, transparent, rgba(226, 232, 240, 0.65), rgba(255, 255, 255, 0.9));
   opacity: 0.35;
   animation-name: shoeSpeedLine;
   animation-timing-function: linear;
@@ -518,16 +518,16 @@ body {
   margin-top: -22px;
   border-radius: 50%;
   color: #fff;
-  background: rgba(124, 58, 237, 0.25);
-  border: 1px solid rgba(255, 255, 255, 0.12);
+  background: rgba(18, 22, 30, 0.75);
+  border: 1px solid rgba(255, 255, 255, 0.2);
   backdrop-filter: blur(10px);
   -webkit-backdrop-filter: blur(10px);
   transition: background var(--transition-fast), transform var(--transition-fast), box-shadow var(--transition-fast);
 }
 
 .shoe-nav:hover {
-  background: var(--accent-primary);
-  box-shadow: 0 0 24px var(--accent-glow);
+  background: rgba(38, 45, 58, 0.95);
+  box-shadow: 0 0 20px rgba(255, 255, 255, 0.18);
   transform: scale(1.1);
 }
 
@@ -542,6 +542,297 @@ body {
 @media (prefers-reduced-motion: reduce) {
   .shoe-bob,
   .shoe-ground,
-  .shoe-speed-line { animation: none; }
+  .shoe-speed-line,
+  .mde-aurora-mesh,
+  .mde-rim-beam,
+  .mde-grid-shimmer,
+  .mde-night-sky,
+  .mde-moon-orb,
+  .mde-valley-lights,
+  .mde-cable-up,
+  .mde-cable-down,
+  .mde-street-lamp-sweep,
+  .medallo-neon-tag { animation: none; }
   .shoe-slide { transition-duration: 0.01s; }
+}
+
+/* ===== Medellín Street Culture — Night Passage Timelapse & Illuminated City ===== */
+@keyframes mdeNightSkyCycle {
+  0%, 100% {
+    background: linear-gradient(180deg, #0b1528 0%, #162642 52%, #131720 100%);
+  }
+  35% {
+    background: linear-gradient(180deg, #050a14 0%, #0d182b 52%, #0e1118 100%);
+  }
+  70% {
+    background: linear-gradient(180deg, #0f1c34 0%, #1e293b 48%, #1c1917 82%, #111318 100%);
+  }
+}
+
+@keyframes mdeMoonTraverse {
+  0% {
+    transform: translate3d(-8vw, 24px, 0) scale(0.95);
+    opacity: 0.35;
+  }
+  20% {
+    opacity: 0.95;
+  }
+  50% {
+    transform: translate3d(38vw, -12px, 0) scale(1.06);
+    opacity: 1;
+  }
+  80% {
+    opacity: 0.9;
+  }
+  100% {
+    transform: translate3d(84vw, 28px, 0) scale(0.95);
+    opacity: 0.35;
+  }
+}
+
+@keyframes mdeValleyTwinkle {
+  0%, 100% {
+    opacity: 0.72;
+    filter: brightness(1);
+  }
+  50% {
+    opacity: 1;
+    filter: brightness(1.35) drop-shadow(0 0 8px rgba(251, 191, 36, 0.55));
+  }
+}
+
+@keyframes mdeCableClimb {
+  0%, 100% {
+    transform: translate(0px, 0px);
+  }
+  50% {
+    transform: translate(85px, -8.5px);
+  }
+}
+
+@keyframes mdeCableDescend {
+  0%, 100% {
+    transform: translate(0px, 0px);
+  }
+  50% {
+    transform: translate(-75px, 7.5px);
+  }
+}
+
+@keyframes mdeStreetLampPass {
+  0% {
+    transform: translate3d(-45%, 0, 0);
+    opacity: 0.55;
+  }
+  50% {
+    transform: translate3d(45%, 0, 0);
+    opacity: 0.95;
+  }
+  100% {
+    transform: translate3d(-45%, 0, 0);
+    opacity: 0.55;
+  }
+}
+
+.mde-night-sky {
+  position: relative;
+  width: 100%;
+  height: 175px;
+  background: linear-gradient(180deg, #0b1528 0%, #162642 52%, #131720 100%);
+  overflow: hidden;
+  z-index: 2;
+  animation: mdeNightSkyCycle 18s ease-in-out infinite;
+}
+
+.mde-moon-orb {
+  position: absolute;
+  top: 22px;
+  left: 6%;
+  width: 34px;
+  height: 34px;
+  border-radius: 50%;
+  background: radial-gradient(circle at 35% 35%, #fffbeb 0%, #fde68a 55%, rgba(251, 191, 36, 0) 100%);
+  box-shadow:
+    0 0 24px rgba(254, 243, 199, 0.85),
+    0 0 60px rgba(251, 191, 36, 0.45),
+    0 0 110px rgba(245, 158, 11, 0.25);
+  pointer-events: none;
+  animation: mdeMoonTraverse 22s ease-in-out infinite;
+}
+
+.mde-valley-lights {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  animation: mdeValleyTwinkle 4.5s ease-in-out infinite;
+}
+
+.mde-cable-up {
+  animation: mdeCableClimb 14s ease-in-out infinite;
+}
+
+.mde-cable-down {
+  animation: mdeCableDescend 16s ease-in-out infinite;
+}
+
+/* Warm nocturnal street-lamp & moonlight illumination behind the cards */
+.mde-street-lamp-sweep {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  z-index: 1;
+  background:
+    radial-gradient(ellipse 38% 55% at 30% 58%, rgba(251, 191, 36, 0.13) 0%, rgba(217, 119, 36, 0.05) 45%, transparent 75%),
+    radial-gradient(ellipse 42% 50% at 70% 52%, rgba(226, 232, 240, 0.1) 0%, rgba(148, 163, 184, 0.04) 45%, transparent 75%);
+  filter: blur(18px);
+  animation: mdeStreetLampPass 14s ease-in-out infinite;
+  will-change: transform, opacity;
+}
+@keyframes mdeAuroraDrift {
+  0% {
+    transform: translate3d(-4%, -2%, 0) scale(1);
+  }
+  50% {
+    transform: translate3d(4%, 3%, 0) scale(1.06);
+  }
+  100% {
+    transform: translate3d(-4%, -2%, 0) scale(1);
+  }
+}
+
+@keyframes mdeRimTrace {
+  0% {
+    background-position: -120% 0;
+  }
+  100% {
+    background-position: 220% 0;
+  }
+}
+
+@keyframes mdeGridBreathe {
+  0%, 100% {
+    opacity: 0.28;
+  }
+  50% {
+    opacity: 0.52;
+  }
+}
+
+@keyframes medalloOrangeGlow {
+  0%, 100% {
+    color: #ff9838;
+    text-shadow:
+      0 0 6px rgba(255, 152, 56, 0.9),
+      0 0 18px rgba(217, 119, 36, 0.75),
+      0 0 34px rgba(217, 119, 36, 0.45),
+      0 4px 12px rgba(0, 0, 0, 0.92);
+  }
+  50% {
+    color: #ffb062;
+    text-shadow:
+      0 0 10px rgba(255, 176, 98, 1),
+      0 0 24px rgba(245, 130, 32, 0.9),
+      0 0 46px rgba(217, 119, 36, 0.65),
+      0 4px 12px rgba(0, 0, 0, 0.92);
+  }
+}
+
+/* Interactive cursor-tracked + autonomous studio obsidian spotlight */
+.mde-studio-backdrop {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  z-index: 1;
+  overflow: hidden;
+  background:
+    radial-gradient(
+      650px circle at var(--spot-x, 50%) var(--spot-y, 55%),
+      rgba(255, 255, 255, 0.075) 0%,
+      rgba(217, 119, 36, 0.045) 32%,
+      transparent 70%
+    );
+  transition: background 0.15s ease-out;
+}
+
+/* Slow volumetric obsidian & warm amber backlight behind the cards */
+.mde-aurora-mesh {
+  position: absolute;
+  inset: -15%;
+  pointer-events: none;
+  z-index: 1;
+  background:
+    radial-gradient(ellipse 55% 42% at 25% 58%, rgba(226, 232, 240, 0.065) 0%, transparent 68%),
+    radial-gradient(ellipse 50% 38% at 75% 52%, rgba(217, 119, 36, 0.07) 0%, transparent 68%),
+    radial-gradient(ellipse 70% 32% at 50% 62%, rgba(255, 255, 255, 0.045) 0%, transparent 72%);
+  filter: blur(28px);
+  animation: mdeAuroraDrift 16s cubic-bezier(0.45, 0.05, 0.55, 0.95) infinite;
+  will-change: transform;
+}
+
+/* Architectural fine dot-grid with radial vignette mask */
+.mde-grid-shimmer {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  z-index: 1;
+  background-image: radial-gradient(rgba(255, 255, 255, 0.14) 1px, transparent 1px);
+  background-size: 24px 24px;
+  mask-image: radial-gradient(ellipse 80% 55% at 50% 60%, #000 15%, transparent 80%);
+  -webkit-mask-image: radial-gradient(ellipse 80% 55% at 50% 60%, #000 15%, transparent 80%);
+  animation: mdeGridBreathe 7s ease-in-out infinite;
+}
+
+/* Crisp metallic rim-light beam tracing along the top & bottom borders */
+.mde-rim-beam {
+  position: absolute;
+  left: 0;
+  right: 0;
+  height: 1px;
+  pointer-events: none;
+  z-index: 4;
+  background: linear-gradient(
+    90deg,
+    transparent 0%,
+    rgba(255, 255, 255, 0.04) 25%,
+    rgba(245, 158, 11, 0.55) 47%,
+    rgba(255, 255, 255, 0.85) 50%,
+    rgba(245, 158, 11, 0.55) 53%,
+    rgba(255, 255, 255, 0.04) 75%,
+    transparent 100%
+  );
+  background-size: 200% 100%;
+  animation: mdeRimTrace 9s linear infinite;
+}
+
+/* Card hover elevation with subtle top specular border highlight */
+.mde-street-card {
+  transition:
+    transform 0.35s cubic-bezier(0.22, 1, 0.36, 1),
+    border-color 0.35s ease,
+    box-shadow 0.35s ease;
+}
+
+.mde-street-card:hover {
+  transform: translateY(-6px);
+  border-color: rgba(217, 119, 36, 0.65) !important;
+  box-shadow:
+    0 20px 38px rgba(0, 0, 0, 0.88),
+    0 0 26px rgba(217, 119, 36, 0.16),
+    inset 0 1px 0 rgba(255, 255, 255, 0.22) !important;
+}
+
+.medallo-neon-tag {
+  color: #ff9838;
+  animation: medalloOrangeGlow 3.2s ease-in-out infinite;
+}
+
+.medallo-neon-underline {
+  height: 3.5px;
+  width: 88%;
+  background: linear-gradient(90deg, #ffb366 0%, #d97724 70%, transparent 100%);
+  margin-top: -4px;
+  border-radius: 3px;
+  box-shadow:
+    0 0 8px rgba(255, 152, 56, 0.95),
+    0 0 18px rgba(217, 119, 36, 0.8);
 }
